@@ -39,7 +39,7 @@ services:
       - app
 
   mysql:
-   image: mysql:5.6
+   image: mysql:5.7
    container_name: mysql-db
    ports:
        - "3307:3306"
