@@ -12,3 +12,7 @@ docker exec -it  php bin/console doctrine:migrations:migrate;
 ```
 docker exec -it  php bin/console doctrine:fixtures:load
 ```
+Просмотр доступных роутов:
+```
+ docker exec -it  php bin/console debug:router
+```

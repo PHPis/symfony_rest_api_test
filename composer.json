@@ -19,7 +19,8 @@
         "symfony/maker-bundle": "^1.30",
         "symfony/proxy-manager-bridge": "5.2.*",
         "symfony/validator": "5.2.*",
-        "symfony/yaml": "5.2.*"
+        "symfony/yaml": "5.2.*",
+        "ext-json": "*"
     },
     "config": {
         "optimize-autoloader": true,
