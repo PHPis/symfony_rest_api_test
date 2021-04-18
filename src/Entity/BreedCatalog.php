@@ -34,6 +34,11 @@ class BreedCatalog
      */
     private $animals;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
+
     public function __construct()
     {
         $this->animals = new ArrayCollection();
@@ -94,6 +99,18 @@ class BreedCatalog
                 $animal->setBreed(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

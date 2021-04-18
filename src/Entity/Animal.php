@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Animal
 {
+    const TYPES = [
+        'dog' => 1,
+        'cat' => 2,
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -32,6 +37,17 @@ class Animal
      * @ORM\JoinColumn(nullable=false)
      */
     private $breed;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Breeder::class, inversedBy="animals")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $breeder;
 
     public function getId(): ?int
     {
@@ -70,6 +86,30 @@ class Animal
     public function setBreed(?BreedCatalog $breed): self
     {
         $this->breed = $breed;
+
+        return $this;
+    }
+
+    public function getType(): ?int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getBreeder(): ?Breeder
+    {
+        return $this->breeder;
+    }
+
+    public function setBreeder(?Breeder $breeder): self
+    {
+        $this->breeder = $breeder;
 
         return $this;
     }

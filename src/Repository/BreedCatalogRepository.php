@@ -19,6 +19,17 @@ class BreedCatalogRepository extends ServiceEntityRepository
         parent::__construct($registry, BreedCatalog::class);
     }
 
+    public function findByType($type)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.type = :val')
+            ->setParameter('val', $type)
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return BreedCatalog[] Returns an array of BreedCatalog objects
     //  */
