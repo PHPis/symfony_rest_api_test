@@ -20,28 +20,44 @@ class AnimalService extends AbstractController
 
     public function createAnimal(Request $request)
     {
-        $breed = new Animal();
-        $breed->setType($request->get('type'));
-        $breed->setName($request->get('name'));
-        $breed->setBreed($this->getBreed($request->get('breed')));
-        $breed->setBreeder($this->getBreeder($request->get('breeder')));
+        $animal = new Animal();
+        $animal->setType($request->get('type'));
+        $animal->setName($request->get('name'));
+        $animal->setBreed($this->getBreed($request->get('breed')));
+        $animal->setGender($request->get('gender'));
+        $animal->setBreeder($this->getBreeder($request->get('breeder')));
+
+        $mother = $this->getAnimal($request->get('mother'));
+        if ($mother && $mother->getGender() == Animal::FEMALE)
+            $animal->setMother($mother);
+
+        $father = $this->getAnimal($request->get('father'));
+        if ($father && $father->getGender() == Animal::MALE)
+            $animal->setFather($father);
+
         try {
-            $breed->setBirthday(new \DateTime($request->get('birthday')));
-            $this->entityManager->persist($breed);
+            $animal->setBirthday(new \DateTime($request->get('birthday')));
+            $this->entityManager->persist($animal);
             $this->entityManager->flush();
-            return $breed;
+            return $animal;
         } catch (\Exception $e) {
             return null;
         }
     }
 
-    public function updateAnimal(Request $request, Animal $breed): ?Animal
+    public function updateAnimal(Request $request, Animal $animal): ?Animal
     {
-        $breed->setName($request->get('name'));
+        $animal->setName($request->get('name'));
+        $mother = $this->getAnimal($request->get('mother'));
+        if ($mother && $mother->getGender() == Animal::FEMALE)
+            $animal->setMother($mother);
+        $father = $this->getAnimal($request->get('father'));
+        if ($father && $father->getGender() == Animal::MALE)
+            $animal->setFather($father);
         try {
-            $this->entityManager->persist($breed);
+            $this->entityManager->persist($animal);
             $this->entityManager->flush();
-            return $breed;
+            return $animal;
         } catch (\Exception $e) {
             return null;
         }
@@ -59,19 +75,7 @@ class AnimalService extends AbstractController
             ->find($id);
     }
 
-    public function updateBreed(Request $request, Animal $animal): ?Animal
-    {
-        $animal->setName($request->get('description'));
-        try {
-            $this->entityManager->persist($animal);
-            $this->entityManager->flush();
-            return $animal;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    public function getAnimal(int $id): ?Animal
+    public function getAnimal(?int $id): ?Animal
     {
         return $this->entityManager->getRepository(Animal::class)
             ->find($id);
@@ -81,6 +85,21 @@ class AnimalService extends AbstractController
     {
         return $this->entityManager->getRepository(Animal::class)
             ->findAll();
+    }
+
+    public function getFamilyTree(int $animal): ?array
+    {
+        $animal = $this->getAnimal($animal);
+        return $this->treeBuilder($animal);
+    }
+
+    public function treeBuilder(?Animal $animal)
+    {
+        if(!$animal)
+            return null;
+        if (!$animal->getMother() && !$animal->getFather())
+            return ['id'=> $animal->getId()];
+        return ['current'=> $animal->getId(), 'mom' => $this->getParents($animal->getMother()), 'dad' => $this->getParents($animal->getFather())];
     }
 
     public function deleteAnimal(Animal $animal): ?int

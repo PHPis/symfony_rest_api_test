@@ -15,6 +15,9 @@ class Animal implements \JsonSerializable
         'cat' => 2,
     ];
 
+    const MALE = 0;
+    const FEMALE = 1;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -48,6 +51,21 @@ class Animal implements \JsonSerializable
      * @ORM\JoinColumn(nullable=false)
      */
     private $breeder;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Animal::class)
+     */
+    private $mother;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Animal::class)
+     */
+    private $father;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $gender;
 
     public function getId(): ?int
     {
@@ -128,6 +146,50 @@ class Animal implements \JsonSerializable
             "name" => $this->getName(),
             "birthday" => $this->getBirthday(),
             "type" => $this->getAnimalType(),
+            "mother" => $this->getMother(),
+            "father" => $this->getFather(),
+            "gender" => $this->getGenderType(),
         ];
+    }
+
+    public function getMother(): ?self
+    {
+        return $this->mother;
+    }
+
+    public function setMother(?self $mother): self
+    {
+        $this->mother = $mother;
+
+        return $this;
+    }
+
+    public function getFather(): ?self
+    {
+        return $this->father;
+    }
+
+    public function setFather(?self $father): self
+    {
+        $this->father = $father;
+
+        return $this;
+    }
+
+    public function getGender(): ?bool
+    {
+        return $this->gender;
+    }
+
+    public function getGenderType(): ?string
+    {
+        return $this->gender ? 'FEMALE' : 'MALE';
+    }
+
+    public function setGender(bool $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
     }
 }

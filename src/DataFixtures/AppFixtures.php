@@ -83,6 +83,7 @@ class AppFixtures extends Fixture
                 'type' => $type,
                 'breed' => $breed->getId(),
                 'breeder' => $breeder->getId(),
+                'gender' => rand(0, 1),
                 ]);
             $this->animalService->createAnimal($req);
             $animalCount--;

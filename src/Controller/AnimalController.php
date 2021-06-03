@@ -36,7 +36,7 @@ class AnimalController extends AbstractController
         try{
             $request = $this->transformJsonBody($request);
             if (!$request || !$request->get('name') || !$request->get('type') ||
-                !$request->get('birthday') || !$request->get('breed') || !$request->get('breeder')) {
+                !$request->get('birthday') || !$request->get('breed') || !$request->get('breeder') || !$request->get('gender')) {
                 throw new \Exception();
             }
             $result = $this->animalService->createAnimal($request);
@@ -79,10 +79,10 @@ class AnimalController extends AbstractController
     {
         $breed = $this->animalService->getAnimal($id);
         if (!$breed)
-            return $this->responseHelper->errorResponse("Breed wasn't found.");
+            return $this->responseHelper->errorResponse("Animal wasn't found.");
 
         $result = $this->animalService->deleteAnimal($breed);
-        return $result ? $this->responseHelper->successResponse('Deleted successfully.') : $this->responseHelper->errorResponse("Breed wasn't deleted. Error on delete.");
+        return $result ? $this->responseHelper->successResponse('Deleted successfully.') : $this->responseHelper->errorResponse("Animal wasn't deleted. Error on delete.");
     }
 
     /**
@@ -93,7 +93,7 @@ class AnimalController extends AbstractController
     public function showAnimal(int $id): ?JsonResponse
     {
         $breed = $this->animalService->getAnimal($id);
-        return $breed ? $this->responseHelper->response($breed) : $this->responseHelper->errorResponse("Breed wasn't found.", 404);
+        return $breed ? $this->responseHelper->response($breed) : $this->responseHelper->errorResponse("Animal wasn't found.", 404);
     }
 
     /**
@@ -104,6 +104,17 @@ class AnimalController extends AbstractController
     {
         $result = $this->animalService->getAllAnimals();
         return $result ? $this->responseHelper->response($result) : $this->responseHelper->errorResponse("Animals weren't found.");
+    }
+
+    /**
+     * @param int $id
+     * @return Animal|null
+     * @Route("/tree/{id}", name="animal_tree", methods={"GET"})
+     */
+    public function getFamilyTree(int $id): JsonResponse
+    {
+        $result = $this->animalService->getFamilyTree($id);
+        return $result ? $this->responseHelper->treeResponse($result) : $this->responseHelper->errorResponse("Animals weren't found.");
     }
 
     //Todo: Вынести

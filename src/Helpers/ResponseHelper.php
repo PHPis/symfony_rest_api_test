@@ -11,6 +11,13 @@ class ResponseHelper
         return new JsonResponse($data, $status, $headers);
     }
 
+    public function treeResponse($data): JsonResponse
+    {
+        return new JsonResponse([
+            'familyTree' => $data,
+        ], 200);
+    }
+
     public function errorResponse($message, $status = 422): JsonResponse
     {
         return new JsonResponse([
