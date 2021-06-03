@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\BreekerRepository;
+use App\Repository\BreederRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=BreekerRepository::class)
+ * @ORM\Entity(repositoryClass=BreederRepository::class)
  */
 class Breeder
 {

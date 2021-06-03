@@ -115,6 +115,7 @@ class BreedCatalog implements \JsonSerializable
         return $this;
     }
 
+    //Todo: Дублируется в Animal Entity
     public function getAnimalType()
     {
         $types = array_flip(Animal::TYPES);

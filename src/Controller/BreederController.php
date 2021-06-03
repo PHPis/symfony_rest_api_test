@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class BreekerController extends AbstractController
+class BreederController extends AbstractController
 {
     #[Route('/breeker', name: 'breeker')]
     public function index(): Response

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=AnimalRepository::class)
  */
-class Animal
+class Animal implements \JsonSerializable
 {
     const TYPES = [
         'dog' => 1,
@@ -112,5 +112,22 @@ class Animal
         $this->breeder = $breeder;
 
         return $this;
+    }
+
+    //Todo: Дублируется в BreedCatalog
+    public function getAnimalType()
+    {
+        $types = array_flip(Animal::TYPES);
+        return $types[$this->type];
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+            "birthday" => $this->getBirthday(),
+            "type" => $this->getAnimalType(),
+        ];
     }
 }

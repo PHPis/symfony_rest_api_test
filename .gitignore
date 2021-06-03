@@ -12,3 +12,4 @@
 /.idea
 /docker/data/mysql
 /mysql/*
+/mysql

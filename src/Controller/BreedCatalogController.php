@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class BreedCatalogController
  * @package App\Controller
- * @Route ("/api", name="breedCatalog.")
+ * @Route ("/api/breeds", name="breedCatalog.")
  */
 class BreedCatalogController extends AbstractController
 {
@@ -29,7 +29,7 @@ class BreedCatalogController extends AbstractController
     /**
      * @param Request $request
      * @return JsonResponse
-     * @Route("/breeds", name="breed_add", methods={"POST"})
+     * @Route("/", name="breed_add", methods={"POST"})
      */
     public function create(Request $request): JsonResponse
     {
@@ -49,7 +49,7 @@ class BreedCatalogController extends AbstractController
      * @param Request $request
      * @param int $id
      * @return BreedCatalog|null
-     * @Route("/breeds/{id}", name="breed_put", methods={"PUT"})
+     * @Route("/{id}", name="breed_put", methods={"PUT"})
      */
     public function updateBreed(Request $request, int $id): ?JsonResponse
     {
@@ -72,7 +72,7 @@ class BreedCatalogController extends AbstractController
     /**
      * @param int $id
      * @return BreedCatalog|null
-     * @Route("/breeds/{id}", name="breed_delete", methods={"DELETE"})
+     * @Route("/{id}", name="breed_delete", methods={"DELETE"})
      */
     public function deleteBreed(int $id): ?JsonResponse
     {
@@ -87,7 +87,7 @@ class BreedCatalogController extends AbstractController
     /**
      * @param int $id
      * @return BreedCatalog|null
-     * @Route("/breeds/{id}", name="breed_get", methods={"GET"})
+     * @Route("/{id}", name="breed_get", methods={"GET"})
      */
     public function showBreed(int $id): ?JsonResponse
     {
@@ -97,7 +97,7 @@ class BreedCatalogController extends AbstractController
 
     /**
      * @return JsonResponse|null
-     * @Route("/breeds", name="breeds", methods={"GET"})
+     * @Route("/", name="breeds", methods={"GET"})
      */
     public function showAllBreed(): ?JsonResponse
     {
@@ -106,19 +106,20 @@ class BreedCatalogController extends AbstractController
     }
 
     /**
-     * @param string $type
+     * @param  $type
      * @return JsonResponse|null
-     * @Route("/breeds/type/{type}", name="breeds_type", methods={"GET"})
+     * @Route("/type/{type}", name="breeds_type", methods={"GET"})
      */
-    public function showBreedByType(string $type): ?JsonResponse
+    public function showBreedByType($type): ?JsonResponse
     {
-        if (!($animalType = Animal::TYPES["$type"] ?: null))
+        if (!($animalType = Animal::TYPES["$type"] ?? null))
             return $this->responseHelper->errorResponse("This type of animal was not found.");
 
         $result = $this->breedCatalogService->getBreedsByType($animalType);
         return $result ? $this->responseHelper->response($result) : $this->responseHelper->errorResponse("Breeds weren't found.");
     }
 
+    //Todo: Вынести
     protected function transformJsonBody(Request $request)
     {
         $data = json_decode($request->getContent(), true);
